@@ -14,6 +14,9 @@ class Workflow(unittest.TestCase):
         for kind,name in [('lot','lot-ok.json'),('fumigate','fumigate-ok.json'),('release','release-ok.json')]:
             import_file(self.db,kind,FIX/name)
 
+    def tearDown(self):
+        self.db.close()
+
     def test_current_module_and_normal_release(self):
         self.assertEqual(Path(grainrelease.__file__).resolve().parents[1],ROOT)
         states={x['entity_id']:x['state'] for x in report(self.db)['entities'] if x['subsystem']=='通风检测与出库'}

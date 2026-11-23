@@ -85,4 +85,5 @@ def audit(db):
         try: import_file(memory,kind,path)
         finally: Path(path).unlink()
     after=report(memory)
+    memory.close()
     return {'ok':before==after,'source_count':len(source_rows),'decision_count':len(before['decisions'])}
