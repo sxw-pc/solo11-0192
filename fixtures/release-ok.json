@@ -1,0 +1,4 @@
+[
+  {"kind":"release","id":"Q-1","version":1,"lot_id":"wheat-7","ventilation_started_at":"2026-07-03T11:00:00","sampled_at":"2026-07-04T12:00:00","minimum_ventilation_hours":24,"residue_limit_mg_per_kg":0.5,"residue_samples":[{"witness":"lab-a","calibrated_until":"2026-08-01T00:00:00","mg_per_kg":0.2},{"witness":"lab-b","calibrated_until":"2026-08-01T00:00:00","mg_per_kg":0.3}],"dispatch_at":"2026-07-05T09:00:00"},
+  {"kind":"release","id":"Q-2","version":1,"lot_id":"rice-8","ventilation_started_at":"2026-07-03T11:00:00","sampled_at":"2026-07-04T12:00:00","minimum_ventilation_hours":24,"residue_limit_mg_per_kg":0.5,"residue_samples":[{"witness":"lab-c","calibrated_until":"2026-08-01T00:00:00","mg_per_kg":0.2},{"witness":"lab-d","calibrated_until":"2026-08-01T00:00:00","mg_per_kg":0.2}],"dispatch_at":"2026-07-05T09:00:00"}
+]

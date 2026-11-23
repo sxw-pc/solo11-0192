@@ -1,0 +1,4 @@
+[
+  {"kind":"lot","id":"L-1","version":1,"lot_id":"wheat-7","bay_id":"bay-a","stored_from":"2026-07-01T00:00:00","stored_until":"2026-08-01T00:00:00","moisture_pct":12,"maximum_moisture_pct":14,"pest_limit":3,"pest_samples":[{"lot_id":"wheat-7","witness":"inspector-a","insects_per_kg":2}]},
+  {"kind":"lot","id":"L-2","version":1,"lot_id":"rice-8","bay_id":"bay-b","stored_from":"2026-07-01T00:00:00","stored_until":"2026-08-01T00:00:00","moisture_pct":13,"maximum_moisture_pct":14,"pest_limit":3,"pest_samples":[{"lot_id":"rice-8","witness":"inspector-b","insects_per_kg":2}]}
+]

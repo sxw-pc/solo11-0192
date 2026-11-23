@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "grainrelease"
+version = "0.1.0"
+description = "Evidence-backed grain fumigation, isolation, and release workbench"
+requires-python = ">=3.10"
+
+[project.scripts]
+grainrelease = "grainrelease.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["grainrelease*"]

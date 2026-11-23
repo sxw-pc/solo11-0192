@@ -1,0 +1,3 @@
+[
+  {"kind":"lot","id":"L-3","version":2,"lot_id":"wheat-7","bay_id":"bay-a","stored_from":"2026-07-01T00:00:00","stored_until":"2026-08-01T00:00:00","moisture_pct":12,"maximum_moisture_pct":14,"pest_limit":3,"pest_samples":[{"lot_id":"wheat-7","witness":"inspector-a","insects_per_kg":2},{"lot_id":"wheat-7","witness":"inspector-c","insects_per_kg":5,"sampled_at":"2026-07-04T08:00:00"}]}
+]

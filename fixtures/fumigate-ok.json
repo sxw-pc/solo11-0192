@@ -1,0 +1,4 @@
+[
+  {"kind":"fumigate","id":"G-1","version":1,"lot_id":"wheat-7","volume_m3":100,"permitted_g_per_m3":2,"dose_g":200,"operator":"team-a","operator_license_from":"2026-01-01T00:00:00","operator_license_until":"2027-01-01T00:00:00","applied_at":"2026-07-02T08:00:00","seal_at":"2026-07-02T09:00:00","seal_until":"2026-07-03T10:00:00","adjacent_group":"north","isolation_witness":"safety-a"},
+  {"kind":"fumigate","id":"G-2","version":1,"lot_id":"rice-8","volume_m3":80,"permitted_g_per_m3":2,"dose_g":160,"operator":"team-b","operator_license_from":"2026-01-01T00:00:00","operator_license_until":"2027-01-01T00:00:00","applied_at":"2026-07-02T08:30:00","seal_at":"2026-07-02T09:30:00","seal_until":"2026-07-03T10:00:00","adjacent_group":"south","isolation_witness":"safety-b"}
+]
