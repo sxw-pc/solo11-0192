@@ -41,4 +41,20 @@ class Workflow(unittest.TestCase):
             with self.assertRaises(ValueError):import_file(self.db,'lot',bad)
         self.assertEqual(before,report(self.db))
 
+    def test_distinct_identity_moisture_dose_and_witness_boundaries(self):
+        import copy,json
+        from grainrelease import lots,fumigation,releases
+        events=[json.loads(x[0]) for x in self.db.execute('SELECT body FROM events ORDER BY seq')]
+        le=[x for x in events if x['kind']=='lot'];fe=[x for x in events if x['kind']=='fumigate'];re=[x for x in events if x['kind']=='release']
+        conflict=copy.deepcopy(le[1]);conflict.update(id='L-X',lot_id='other',bay_id='bay-a')
+        self.assertFalse(lots.decide(le+[conflict])['wheat-7']['identity'])
+        wet=copy.deepcopy(le[0]);wet.update(id='L-W',version=2,moisture_pct=18)
+        self.assertEqual(lots.decide(le+[wet])['wheat-7']['status'],'transfer-required')
+        bad_dose=copy.deepcopy(fe[0]);bad_dose.update(id='G-X',version=2,dose_g=100,operator_license_until='2026-01-02T00:00:00')
+        judged=fumigation.decide(fe+[bad_dose],lots.decide(le))['wheat-7']
+        self.assertFalse(judged['dose']);self.assertFalse(judged['qualified'])
+        bad_witness=copy.deepcopy(re[0]);bad_witness.update(id='Q-X',version=2,residue_samples=[{'witness':'team-a','calibrated_until':'2026-08-01T00:00:00','mg_per_kg':0.2}])
+        judged=releases.decide(re+[bad_witness],lots.decide(le),fumigation.decide(fe,lots.decide(le)))['wheat-7']
+        self.assertFalse(judged['independent']);self.assertFalse(judged['released'])
+
 if __name__=='__main__':unittest.main()
