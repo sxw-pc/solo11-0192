@@ -1,0 +1,24 @@
+{
+  "scenario": "C1 下季仓位预约限额 100，柜台 desk-1 受理 R1=80、柜台 desk-2 受理 R2=50，两笔共用同一担保函 G-1",
+  "beneficiary": "depot-north",
+  "as_of": "2026-12-01T00:00:00",
+  "credit": [
+    {"customer_id": "C1", "limit": 100}
+  ],
+  "letters": [
+    {"letter_id": "G-1", "customer_id": "C1", "beneficiary": "depot-north", "valid_from": "2026-11-01T00:00:00", "valid_until": "2027-03-01T00:00:00", "balance": 100, "status": "effective"},
+    {"letter_id": "G-2", "customer_id": "C1", "beneficiary": "depot-north", "valid_from": "2026-11-01T00:00:00", "valid_until": "2027-03-01T00:00:00", "balance": 100, "status": "effective"},
+    {"letter_id": "G-3", "customer_id": "C1", "beneficiary": "depot-north", "valid_from": "2026-11-01T00:00:00", "valid_until": "2027-03-01T00:00:00", "balance": 100, "status": "draft"}
+  ],
+  "bookings": [
+    {"booking_id": "R1", "customer_id": "C1", "letter_id": "G-1", "amount": 80, "counter": "desk-1"},
+    {"booking_id": "R2", "customer_id": "C1", "letter_id": "G-1", "amount": 50, "counter": "desk-2"}
+  ],
+  "occupations": [
+    {"booking_id": "R1", "customer_id": "C1", "amount": 80, "state": "occupied"}
+  ],
+  "recovery": {
+    "bank_holds_r1": {"occupied": ["R1"], "expect": {"R1": "effective", "R2": "pending"}},
+    "bank_holds_r2": {"occupied": ["R2"], "expect": {"R1": "pending", "R2": "effective"}}
+  }
+}
