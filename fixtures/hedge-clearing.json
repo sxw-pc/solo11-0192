@@ -1,0 +1,239 @@
+{
+  "scenario": "cross-month-roll-single-leg-cleared",
+  "description": "Same account: WHEAT-JUL buy 3, WHEAT-JUL sell 1, WHEAT-SEP sell 2. Broker labels the two sells as roll combo ROLL-1, but clearing has confirmed only the JUL leg in R1 and then went offline. branches.paired gives same-round pair confirmation plus relief receipt; branches.cancelled_jul gives JUL sell cancellation plus independent SEP validity.",
+  "account": "GD-MAIN",
+  "as_of_round": "R1",
+  "per_lot": {
+    "WHEAT-JUL": 1000,
+    "WHEAT-SEP": 1000
+  },
+  "available_cash": 1200,
+  "collateral_posted": 800,
+  "settlements": {
+    "WHEAT-JUL": {
+      "previous_settle": 2400,
+      "settlement_price": 2425,
+      "multiplier": 10
+    },
+    "WHEAT-SEP": {
+      "previous_settle": 2500,
+      "settlement_price": 2495,
+      "multiplier": 10
+    }
+  },
+  "combos": [
+    {
+      "combo_id": "ROLL-1",
+      "legs": [
+        "T-JUL-S1",
+        "T-SEP-S2"
+      ],
+      "source": "broker",
+      "indicated_relief": 1500
+    }
+  ],
+  "reports": [
+    {
+      "id": "RP-B3-T",
+      "trade_id": "T-JUL-B3",
+      "account": "GD-MAIN",
+      "contract": "WHEAT-JUL",
+      "lots": 3,
+      "price": 2400,
+      "side": "buy",
+      "source": "terminal",
+      "kind": "fill",
+      "status": "filled",
+      "clearing_round": "R1",
+      "correction_chain": "CH-B3",
+      "version": 1
+    },
+    {
+      "id": "RP-B3-DUP",
+      "trade_id": "T-JUL-B3",
+      "account": "GD-MAIN",
+      "contract": "WHEAT-JUL",
+      "lots": 3,
+      "price": 2400,
+      "side": "buy",
+      "source": "broker",
+      "kind": "reissue",
+      "status": "filled",
+      "clearing_round": "R1",
+      "correction_chain": "CH-B3",
+      "version": 1
+    },
+    {
+      "id": "RP-B3-CLR",
+      "trade_id": "T-JUL-B3",
+      "account": "GD-MAIN",
+      "contract": "WHEAT-JUL",
+      "lots": 3,
+      "side": "buy",
+      "source": "clearing-house",
+      "kind": "clearing-ack",
+      "status": "confirmed",
+      "clearing_round": "R1",
+      "correction_chain": "CH-B3",
+      "version": 1
+    },
+    {
+      "id": "RP-S1-CLR",
+      "trade_id": "T-JUL-S1",
+      "account": "GD-MAIN",
+      "contract": "WHEAT-JUL",
+      "lots": -1,
+      "price": 2420,
+      "side": "sell",
+      "combo_id": "ROLL-1",
+      "source": "clearing-house",
+      "kind": "clearing-ack",
+      "status": "confirmed",
+      "clearing_round": "R1",
+      "correction_chain": "CH-S1",
+      "version": 1
+    },
+    {
+      "id": "RP-S2-BRK",
+      "trade_id": "T-SEP-S2",
+      "account": "GD-MAIN",
+      "contract": "WHEAT-SEP",
+      "lots": -2,
+      "price": 2480,
+      "side": "sell",
+      "combo_id": "ROLL-1",
+      "source": "broker",
+      "kind": "fill-report",
+      "status": "reported",
+      "clearing_round": null,
+      "correction_chain": "CH-S2",
+      "version": 1
+    }
+  ],
+  "branches": {
+    "paired": [
+      {
+        "id": "RP-S1-R2",
+        "trade_id": "T-JUL-S1",
+        "account": "GD-MAIN",
+        "contract": "WHEAT-JUL",
+        "lots": -1,
+        "side": "sell",
+        "combo_id": "ROLL-1",
+        "source": "clearing-house",
+        "kind": "clearing-ack",
+        "status": "confirmed",
+        "clearing_round": "R2",
+        "correction_chain": "CH-S1",
+        "version": 1
+      },
+      {
+        "id": "RP-S2-R2",
+        "trade_id": "T-SEP-S2",
+        "account": "GD-MAIN",
+        "contract": "WHEAT-SEP",
+        "lots": -2,
+        "side": "sell",
+        "combo_id": "ROLL-1",
+        "source": "clearing-house",
+        "kind": "clearing-ack",
+        "status": "confirmed",
+        "clearing_round": "R2",
+        "correction_chain": "CH-S2",
+        "version": 1
+      },
+      {
+        "id": "PAIR-ROLL-1",
+        "approval_id": "SPR-ROLL-1-R2",
+        "kind": "spread_approval",
+        "account": "GD-MAIN",
+        "combo_id": "ROLL-1",
+        "pair_id": "ROLL-1",
+        "legs": [
+          "T-JUL-S1",
+          "T-SEP-S2"
+        ],
+        "clearing_round": "R2",
+        "round": "R2",
+        "source": "clearing-house",
+        "status": "approved",
+        "approved": true,
+        "relief": 1500,
+        "spread_credit": 1500,
+        "receipt": "SPREAD-RELIEF-0001"
+      }
+    ],
+    "cancelled_jul": [
+      {
+        "id": "RP-S1-CANC",
+        "trade_id": "T-JUL-S1",
+        "account": "GD-MAIN",
+        "contract": "WHEAT-JUL",
+        "lots": -1,
+        "side": "sell",
+        "combo_id": "ROLL-1",
+        "source": "clearing-house",
+        "kind": "trade-cancellation",
+        "status": "cancelled",
+        "clearing_round": "R2",
+        "correction_chain": "CH-S1",
+        "version": 2,
+        "reason": "clearing house revoked JUL sell leg"
+      },
+      {
+        "id": "RP-S2-OK-R2",
+        "trade_id": "T-SEP-S2",
+        "account": "GD-MAIN",
+        "contract": "WHEAT-SEP",
+        "lots": -2,
+        "side": "sell",
+        "combo_id": "ROLL-1",
+        "source": "clearing-house",
+        "kind": "clearing-ack",
+        "status": "confirmed",
+        "clearing_round": "R2",
+        "correction_chain": "CH-S2",
+        "version": 1,
+        "standalone": true,
+        "note": "SEP sell valid as outright"
+      }
+    ]
+  },
+  "expect": {
+    "single_leg": {
+      "WHEAT-JUL": 2,
+      "WHEAT-SEP": -2,
+      "gross_initial_margin": 4000,
+      "spread_relief": 0,
+      "initial_margin": 4000,
+      "confirmed_initial_margin": 2000,
+      "unconfirmed_difference": 2000,
+      "potential_spread_relief": 1500,
+      "variation_margin": 600,
+      "collateral_eligible": 800,
+      "available_cash": 1200,
+      "margin_call": 3200,
+      "cash_to_raise": 2000
+    },
+    "paired": {
+      "WHEAT-JUL": 2,
+      "WHEAT-SEP": -2,
+      "gross_initial_margin": 4000,
+      "spread_relief": 1500,
+      "initial_margin": 2500,
+      "variation_margin": 600,
+      "margin_call": 1700,
+      "cash_to_raise": 500
+    },
+    "cancelled_jul": {
+      "WHEAT-JUL": 3,
+      "WHEAT-SEP": -2,
+      "gross_initial_margin": 5000,
+      "spread_relief": 0,
+      "initial_margin": 5000,
+      "variation_margin": 850,
+      "margin_call": 4200,
+      "cash_to_raise": 3000
+    }
+  }
+}
