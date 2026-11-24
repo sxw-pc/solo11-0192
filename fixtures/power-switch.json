@@ -1,0 +1,250 @@
+{
+  "fixture": "power-switch",
+  "title": "E1 粮库烘干专线主备表掉线重叠与两种合同补证",
+  "period": {
+    "period_id": "2026-10",
+    "month": "2026-10",
+    "date": "2026-10-15",
+    "timezone": "Asia/Shanghai",
+    "start_minute": 540,
+    "end_minute": 600,
+    "interval_minutes": 15
+  },
+  "as_of": "2026-10-15",
+  "threshold_kw": 100,
+  "tariff": {"rate_per_kw": 40.0, "currency": "CNY", "note": "费率仅用于演示金额，合同硬边界是 100kW 档位"},
+  "service_points": [
+    {
+      "service_id": "E1",
+      "account_id": "GK-E1",
+      "site": "一号仓烘干/通风专线",
+      "contract_main_meter": "M-MAIN",
+      "contract_backup_meter": "M-BACKUP",
+      "backup_rule": "only when contract main meter failed and backup calibration valid"
+    }
+  ],
+  "meters": [
+    {"kind": "meter", "meter_id": "M-MAIN", "service_id": "E1", "role": "main",
+     "serial": "DTZ188-E1-01", "calibration_id": "CAL-M-2026", "calibrated_until": "2027-12-31"},
+    {"kind": "meter", "meter_id": "M-BACKUP", "service_id": "E1", "role": "backup",
+     "serial": "DTZ188-E1-B07", "calibration_id": "CAL-B-2026", "calibrated_until": "2027-06-30"}
+  ],
+  "events": [
+    {"record_id": "ARR-01-BRUN", "kind": "meter_status", "service_id": "E1", "meter_id": "M-BACKUP",
+     "minute": 548, "state": "running", "arrival_seq": 1,
+     "note": "备用表第548分钟起运行（现场先上传）"},
+    {"record_id": "ARR-02-DROP", "kind": "meter_status", "service_id": "E1", "meter_id": "M-MAIN",
+     "minute": 550, "state": "offline", "arrival_seq": 2,
+     "note": "主表第550分钟掉线，主备重叠2分钟"},
+    {"record_id": "OFF-540-80", "kind": "instantaneous_sample", "service_id": "E1", "meter_id": "M-MAIN",
+     "minute": 540, "kw": 80, "arrival_seq": 5,
+     "note": "主表本地缓存的离线瞬时采样，迟到上传"},
+    {"record_id": "OFF-555-120", "kind": "instantaneous_sample", "service_id": "E1", "meter_id": "M-MAIN",
+     "minute": 555, "kw": 120, "arrival_seq": 6,
+     "note": "120kW 是故障/掉线窗口边缘的一次瞬时采样，不是15分钟区间需量"}
+  ],
+  "initial_provisional_bill": {
+    "service_id": "E1",
+    "period": "2026-10",
+    "version": 1,
+    "issued": true,
+    "peak_kw": 120,
+    "basis": "naive max of offline instantaneous samples",
+    "tier": "peak_surcharge",
+    "surcharge": true
+  },
+  "base_expected": {
+    "disputed_interval": 540,
+    "status": "pending",
+    "status_cn": "待核",
+    "raw_sample_max_kw": 120,
+    "settled_peak_kw": null,
+    "reason": "缺少双方签认的换表授权或主表恢复继续计费回执，重叠区间计费原件不能确定"
+  },
+  "path_a": {
+    "name": "seal-voucher-plus-calibrated-backup-pulses",
+    "summary": "服务方回传主表故障前封表凭证与备表经校准的完整区间脉冲，区间平均96kW，不收峰值附加费",
+    "period": {"period_id": "2026-10", "date": "2026-10-15", "start_minute": 540, "end_minute": 555, "interval_minutes": 15},
+    "as_of": "2026-10-15",
+    "threshold_kw": 100,
+    "service_points": [
+      {"service_id": "E1", "main_meter_id": "M-MAIN", "backup_meter_id": "M-BACKUP"}
+    ],
+    "meters": [
+      {"kind": "meter", "meter_id": "M-MAIN", "service_id": "E1", "role": "main",
+       "calibration_id": "CAL-M-2026", "calibrated_until": "2027-12-31"},
+      {"kind": "meter", "meter_id": "M-BACKUP", "service_id": "E1", "role": "backup",
+       "calibration_id": "CAL-B-2026", "calibrated_until": "2027-06-30"}
+    ],
+    "events": [
+      {"record_id": "OFF-540-80", "kind": "instantaneous_sample", "service_id": "E1", "meter_id": "M-MAIN", "minute": 540, "kw": 80},
+      {"record_id": "OFF-555-120", "kind": "instantaneous_sample", "service_id": "E1", "meter_id": "M-MAIN", "minute": 555, "kw": 120},
+      {"record_id": "ST-BRUN", "kind": "meter_status", "service_id": "E1", "meter_id": "M-BACKUP", "minute": 548, "state": "running"},
+      {"record_id": "ST-DROP", "kind": "meter_status", "service_id": "E1", "meter_id": "M-MAIN", "minute": 550, "state": "offline"},
+      {"record_id": "AUTH-A-SWITCH", "kind": "switch_authorization", "service_id": "E1",
+       "main_meter_id": "M-MAIN", "backup_meter_id": "M-BACKUP",
+       "failure_minute": 550, "boundary_minute": 550,
+       "overlap_billing_meter_id": "M-MAIN",
+       "seal": {"minute": 550, "reading_kwh": 12345.6, "signed_by_both": true},
+       "start_reading": {"minute": 550, "reading_kwh": 900.0, "signed_by_both": true},
+       "authorized": true, "jointly_signed": true,
+       "signed_by": ["东北一号粮库", "供电服务方"],
+       "receipt_id": "SRV-SEAL-A",
+       "note": "故障前封表读数与备表启表读数双方签认；548-550重叠仍由主表作为计费原件"},
+      {"record_id": "ENG-A-MAIN-540-550", "kind": "energy", "service_id": "E1", "meter_id": "M-MAIN",
+       "start_minute": 540, "end_minute": 550, "kwh": 16.0,
+       "note": "主表封表边界前10分钟，平均96kW"},
+      {"record_id": "ENG-A-BACKUP-OVERLAP", "kind": "energy", "service_id": "E1", "meter_id": "M-BACKUP",
+       "start_minute": 548, "end_minute": 550, "kwh": 2.0,
+       "note": "备表重叠2分钟上传，按授权不计费，仅留痕，禁止重复计算"},
+      {"record_id": "ENG-A-BACKUP-550-555", "kind": "energy", "service_id": "E1", "meter_id": "M-BACKUP",
+       "start_minute": 550, "end_minute": 555, "kwh": 8.0,
+       "note": "启表边界后5分钟，平均96kW"},
+      {"record_id": "RCP-A-96", "kind": "interval_receipt", "service_id": "E1", "meter_id": "M-BACKUP",
+       "interval_start": 540, "minutes": 15, "kwh": 24.0, "avg_kw": 96.0,
+       "billing_meter_id": "M-BACKUP",
+       "calibration_id": "CAL-B-2026",
+       "signed_by": ["东北一号粮库", "供电服务方"],
+       "provider_receipt_id": "SRV-INTERVAL-A-540",
+       "note": "服务方区间回执：备表校准脉冲积分完整区间24kWh，需量96kW"}
+    ],
+    "expected": {
+      "interval_start": 540,
+      "status": "settled",
+      "billing_meter_id": "M-BACKUP",
+      "demand_kw": 96.0,
+      "peak_kw": 96.0,
+      "tier": "standard",
+      "surcharge": false,
+      "single_billing_meter": true,
+      "calibration_valid": true,
+      "overlap_billing_meter": "M-MAIN",
+      "excluded_overlap_minutes": [548, 549]
+    }
+  },
+  "path_b": {
+    "name": "main-auto-recovery-signed-continuation-108",
+    "summary": "服务方回传主表第550分钟自动恢复并经双方签认继续为计费表，完整区间108kW，进入超档账单",
+    "period": {"period_id": "2026-10", "date": "2026-10-15", "start_minute": 540, "end_minute": 555, "interval_minutes": 15},
+    "as_of": "2026-10-15",
+    "threshold_kw": 100,
+    "service_points": [
+      {"service_id": "E1", "main_meter_id": "M-MAIN", "backup_meter_id": "M-BACKUP"}
+    ],
+    "meters": [
+      {"kind": "meter", "meter_id": "M-MAIN", "service_id": "E1", "role": "main",
+       "calibration_id": "CAL-M-2026", "calibrated_until": "2027-12-31"},
+      {"kind": "meter", "meter_id": "M-BACKUP", "service_id": "E1", "role": "backup",
+       "calibration_id": "CAL-B-2026", "calibrated_until": "2027-06-30"}
+    ],
+    "events": [
+      {"record_id": "OFF-540-80", "kind": "instantaneous_sample", "service_id": "E1", "meter_id": "M-MAIN", "minute": 540, "kw": 80},
+      {"record_id": "OFF-555-120", "kind": "instantaneous_sample", "service_id": "E1", "meter_id": "M-MAIN", "minute": 555, "kw": 120},
+      {"record_id": "ST-BRUN", "kind": "meter_status", "service_id": "E1", "meter_id": "M-BACKUP", "minute": 548, "state": "running"},
+      {"record_id": "ST-DROP", "kind": "meter_status", "service_id": "E1", "meter_id": "M-MAIN", "minute": 550, "state": "offline"},
+      {"record_id": "ST-RECOVER", "kind": "meter_status", "service_id": "E1", "meter_id": "M-MAIN", "minute": 550, "state": "online"},
+      {"record_id": "AUTH-B-CONTINUE", "kind": "continuation_authorization", "service_id": "E1",
+       "meter_id": "M-MAIN", "main_meter_id": "M-MAIN",
+       "minute": 550, "auto_recovered": true,
+       "continues_as_billing_meter": true,
+       "authorized": true, "jointly_signed": true,
+       "signed_by": ["东北一号粮库", "供电服务方"],
+       "receipt_id": "SRV-CONT-B",
+       "note": "双方签认主表自动恢复并继续作为合同计费表，备表全程仅参考"},
+      {"record_id": "ENG-B-MAIN-540-555", "kind": "energy", "service_id": "E1", "meter_id": "M-MAIN",
+       "start_minute": 540, "end_minute": 555, "kwh": 27.0,
+       "note": "主表完整区间积分27kWh，平均108kW"},
+      {"record_id": "ENG-B-BACKUP-OVERLAP", "kind": "energy", "service_id": "E1", "meter_id": "M-BACKUP",
+       "start_minute": 548, "end_minute": 550, "kwh": 2.4,
+       "note": "备表重叠2分钟数据按继续计费签认排除，不得重复计电"},
+      {"record_id": "RCP-B-108", "kind": "interval_receipt", "service_id": "E1", "meter_id": "M-MAIN",
+       "interval_start": 540, "minutes": 15, "kwh": 27.0, "avg_kw": 108.0,
+       "billing_meter_id": "M-MAIN",
+       "calibration_id": "CAL-M-2026",
+       "signed_by": ["东北一号粮库", "供电服务方"],
+       "provider_receipt_id": "SRV-INTERVAL-B-540",
+       "note": "服务方回执：完整区间需量108kW（不是瞬时120kW）"}
+    ],
+    "expected": {
+      "interval_start": 540,
+      "status": "settled",
+      "billing_meter_id": "M-MAIN",
+      "demand_kw": 108.0,
+      "peak_kw": 108.0,
+      "tier": "peak_surcharge",
+      "surcharge": true,
+      "single_billing_meter": true,
+      "calibration_valid": true
+    }
+  },
+  "missing_case": {
+    "name": "complete-first-interval-then-outage-gap",
+    "summary": "540区间有签认回执，555-600整段缺测，列为不可结算范围",
+    "period": {"period_id": "2026-10", "date": "2026-10-15", "start_minute": 540, "end_minute": 600, "interval_minutes": 15},
+    "as_of": "2026-10-15",
+    "threshold_kw": 100,
+    "events": [
+      {"record_id": "RCP-ONLY-540", "kind": "interval_receipt", "service_id": "E1", "meter_id": "M-MAIN",
+       "interval_start": 540, "minutes": 15, "kwh": 24.0, "avg_kw": 96.0,
+       "signed_by": ["东北一号粮库", "供电服务方"]}
+    ],
+    "expected": {
+      "peak_kw": 96.0,
+      "missing_range": {"start_minute": 555, "end_minute": 600, "minutes": 45, "interval_starts": [555, 570, 585]}
+    }
+  },
+  "calibration_expired_case": {
+    "name": "backup-calibration-expired-cannot-substitute",
+    "summary": "主表失效且有换表授权，但备表校准过期，备表来源无效，区间不可结算",
+    "period": {"period_id": "2026-10", "date": "2026-10-15", "start_minute": 540, "end_minute": 555, "interval_minutes": 15},
+    "as_of": "2026-10-15",
+    "threshold_kw": 100,
+    "service_points": [{"service_id": "E1", "main_meter_id": "M-MAIN", "backup_meter_id": "M-BACKUP"}],
+    "meters": [
+      {"kind": "meter", "meter_id": "M-MAIN", "service_id": "E1", "role": "main", "calibrated_until": "2027-12-31"},
+      {"kind": "meter", "meter_id": "M-BACKUP", "service_id": "E1", "role": "backup", "calibrated_until": "2025-01-31"}
+    ],
+    "events": [
+      {"record_id": "ST-DROP-X", "kind": "meter_status", "service_id": "E1", "meter_id": "M-MAIN", "minute": 543, "state": "offline"},
+      {"record_id": "AUTH-X", "kind": "switch_authorization", "service_id": "E1",
+       "main_meter_id": "M-MAIN", "backup_meter_id": "M-BACKUP",
+       "boundary_minute": 540, "authorized": true, "jointly_signed": true,
+       "signed_by": ["东北一号粮库", "供电服务方"]},
+      {"record_id": "ENG-X-B", "kind": "energy", "service_id": "E1", "meter_id": "M-BACKUP",
+       "start_minute": 540, "end_minute": 555, "kwh": 24.0}
+    ],
+    "expected": {"settled": false, "calibration_valid": false}
+  },
+  "overlap_owner_case": {
+    "name": "contractual-overlap-owner-not-upload-order-or-low-reading",
+    "summary": "同一组主备重叠能量，仅靠授权指定重叠计费表；上传次序打乱与结论无关，读数较低也不优先",
+    "period": {"period_id": "2026-10", "date": "2026-10-15", "start_minute": 540, "end_minute": 555, "interval_minutes": 15},
+    "as_of": "2026-10-15",
+    "meters": [
+      {"kind": "meter", "meter_id": "M-MAIN", "service_id": "E1", "role": "main", "calibrated_until": "2027-12-31"},
+      {"kind": "meter", "meter_id": "M-BACKUP", "service_id": "E1", "role": "backup", "calibrated_until": "2027-06-30"}
+    ],
+    "common_events": [
+      {"record_id": "OV-BRUN", "kind": "meter_status", "service_id": "E1", "meter_id": "M-BACKUP", "minute": 548, "state": "running"},
+      {"record_id": "OV-DROP", "kind": "meter_status", "service_id": "E1", "meter_id": "M-MAIN", "minute": 550, "state": "offline"},
+      {"record_id": "OV-MAIN-KWH", "kind": "energy", "service_id": "E1", "meter_id": "M-MAIN",
+       "start_minute": 540, "end_minute": 555, "kwh": 27.5, "note": "主表恒定110kW，读数较高"},
+      {"record_id": "OV-BACKUP-KWH", "kind": "energy", "service_id": "E1", "meter_id": "M-BACKUP",
+       "start_minute": 548, "end_minute": 555, "kwh": 10.5, "note": "备表恒定90kW，读数较低"}
+    ],
+    "auth_main_original": {
+      "record_id": "OV-AUTH-MAIN", "kind": "switch_authorization", "service_id": "E1",
+      "main_meter_id": "M-MAIN", "backup_meter_id": "M-BACKUP",
+      "boundary_minute": 550, "overlap_billing_meter_id": "M-MAIN",
+      "authorized": true, "jointly_signed": true, "signed_by": ["东北一号粮库", "供电服务方"]
+    },
+    "auth_backup_original": {
+      "record_id": "OV-AUTH-BACKUP", "kind": "switch_authorization", "service_id": "E1",
+      "main_meter_id": "M-MAIN", "backup_meter_id": "M-BACKUP",
+      "boundary_minute": 550, "overlap_billing_meter_id": "M-BACKUP",
+      "authorized": true, "jointly_signed": true, "signed_by": ["东北一号粮库", "供电服务方"]
+    },
+    "expected_main_owner_demand_kw": 103.333333,
+    "expected_backup_owner_demand_kw": 100.666667
+  }
+}
