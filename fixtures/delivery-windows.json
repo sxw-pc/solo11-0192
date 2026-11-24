@@ -1,0 +1,36 @@
+{
+  "depart_after": "2026-07-05T07:30:00",
+  "reports": [
+    {"kind": "position", "carrier_id": "C1", "depot": "A", "as_of": "2026-07-05T06:00:00", "axle_class": "heavy"},
+    {"kind": "position", "carrier_id": "C2", "depot": "B", "as_of": "2026-07-05T06:00:00", "axle_class": "light"},
+    {"kind": "shift", "carrier_id": "C1", "rest_minutes": 20, "cleaning_minutes": 10, "reported_at": "2026-07-05T06:00:00"},
+    {"kind": "shift", "carrier_id": "C2", "rest_minutes": 30, "cleaning_minutes": 10, "reported_at": "2026-07-05T06:00:00"}
+  ],
+  "roads": {
+    "segments": [
+      {"from": "A", "to": "D1", "minutes": 30},
+      {"from": "A", "to": "R", "minutes": 70},
+      {"from": "R", "to": "D1", "minutes": 90},
+      {"from": "B", "to": "D1", "minutes": 40},
+      {"from": "B", "to": "D2", "minutes": 35},
+      {"from": "D1", "to": "D2", "minutes": 45, "oneway": true},
+      {"from": "A", "to": "D2", "minutes": 55, "axle_limit": "light"}
+    ]
+  },
+  "customers": [
+    {"stop": "D1", "window_from": "2026-07-05T08:00:00", "window_until": "2026-07-05T10:00:00", "unload_minutes": 60},
+    {"stop": "D2", "window_from": "2026-07-05T09:30:00", "window_until": "2026-07-05T10:30:00", "unload_minutes": 30, "dock_close": "2026-07-05T10:30:00"}
+  ],
+  "announcements": {
+    "initial": [
+      {"kind": "notice", "id": "N-1", "issuer": "road-authority", "segment": "A->D1", "axle_class": "heavy", "effective_from": "2026-07-05T07:00:00", "effective_until": "2026-07-05T09:00:00", "issued_at": "2026-07-05T06:30:00"}
+    ],
+    "permit_path": [
+      {"kind": "permit", "id": "P-1", "carrier_id": "C1", "segment": "A->D1", "issued_by": "road-authority", "issued_at": "2026-07-05T06:45:00", "effective_from": "2026-07-05T07:00:00", "effective_until": "2026-07-05T09:00:00"}
+    ],
+    "extension_path": [
+      {"kind": "notice", "id": "N-2", "issuer": "road-authority", "segment": "A->D1", "axle_class": "heavy", "effective_from": "2026-07-05T07:00:00", "effective_until": "2026-07-05T12:00:00", "issued_at": "2026-07-05T06:50:00", "extends": "N-1"},
+      {"kind": "permit", "id": "P-2", "carrier_id": "C1", "segment": "A->D1", "issued_by": "road-authority", "issued_at": "2026-07-05T06:55:00", "effective_from": "2026-07-05T12:00:00", "effective_until": "2026-07-05T18:00:00"}
+    ]
+  }
+}
