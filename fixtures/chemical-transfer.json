@@ -1,0 +1,26 @@
+{
+  "start": "2026-11-24T08:00:00",
+  "locations": {
+    "A": {"kind": "cabinet", "capacity_kg": 5},
+    "B": {"kind": "cabinet", "capacity_kg": 5},
+    "T": {"kind": "cabinet", "capacity_kg": 3},
+    "Q": {"kind": "cabinet", "capacity_kg": 2},
+    "S": {"kind": "staging", "capacity_kg": 10},
+    "GATE": {"kind": "external"}
+  },
+  "routes": [["A", "S"], ["S", "B"], ["S", "T"], ["A", "Q"], ["A", "GATE"]],
+  "incompatible": [["X", "Y"]],
+  "staff": ["zhang", "li", "wang"],
+  "recyclers": {
+    "R-7": {"license_until": "2027-06-30T00:00:00"},
+    "R-8": {"license_until": "2028-01-01T00:00:00"},
+    "R-9": {"license_until": "2026-01-01T00:00:00"}
+  },
+  "containers": [
+    {"container_id": "X1", "chemical": "X", "kg": 2, "location": "A", "seal": "SEAL-X1"},
+    {"container_id": "Y1", "chemical": "Y", "kg": 2, "location": "A", "seal": "SEAL-Y1"},
+    {"container_id": "X2", "chemical": "X", "kg": 2, "location": "S", "seal": "SEAL-X2"},
+    {"container_id": "U1", "chemical": null, "kg": 1, "location": "Q", "seal": "SEAL-U1"}
+  ],
+  "notice": {"notice_id": "N1", "available": ["X1", "Y1", "X2"], "at": "2026-11-24T08:00:00"}
+}
