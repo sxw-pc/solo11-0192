@@ -1,0 +1,1 @@
+{"events":[{"carrier_id":"C1","depot":"A"},{"carrier_id":"C2","depot":"B"}],"travel":{"stops":["D1"],"A":{"D1":30},"B":{"D1":40}}}
