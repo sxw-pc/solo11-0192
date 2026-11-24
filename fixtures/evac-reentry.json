@@ -1,0 +1,45 @@
+{
+  "alarm": {"id": "FUM-ALARM-1", "at": "2026-11-24T10:00:00", "round": 1, "reason": "熏蒸区气体泄漏警报"},
+  "people": [
+    {"id": "p-w1", "name": "W1", "role": "worker-rescuer", "badges": ["W1"], "visitor": false},
+    {"id": "p-v1", "name": "V1", "role": "visitor", "badges": ["V1"], "visitor": true}
+  ],
+  "gates": [
+    {"id": "G-W1-IN", "badge_id": "W1", "kind": "entry", "at": "2026-11-24T09:50:00", "device": "north-in", "received_at": "2026-11-24T09:50:10"},
+    {"id": "G-V1-IN", "badge_id": "V1", "kind": "entry", "at": "2026-11-24T09:52:00", "device": "north-in", "received_at": "2026-11-24T09:52:08"},
+    {"id": "G-W1-OUT", "badge_id": "W1", "kind": "exit", "at": "2026-11-24T10:03:00", "device": "north-out", "received_at": "2026-11-24T10:15:00"},
+    {"id": "G-V1-OUT", "badge_id": "V1", "kind": "exit", "at": "2026-11-24T10:04:00", "device": "north-out", "received_at": "2026-11-24T10:04:30"},
+    {"id": "G-V1-RE", "badge_id": "V1", "kind": "entry", "at": "2026-11-24T10:07:00", "device": "north-in", "received_at": "2026-11-24T10:31:00"}
+  ],
+  "muster": [
+    {"id": "M-W1-1005", "person_id": "p-w1", "badge_id": "W1", "at": "2026-11-24T10:05:00", "witness": "safety-a", "round": 1},
+    {"id": "M-V1-1005", "person_id": "p-v1", "badge_id": "V1", "at": "2026-11-24T10:05:00", "witness": "safety-b", "round": 1}
+  ],
+  "statements": [
+    {"id": "S-W1-BORROW", "badge_id": "V1", "person_id": "p-w1", "at": "2026-11-24T10:07:00", "text": "W1 借用 V1 工牌取物的口头说明"}
+  ],
+  "announcements": [
+    {"id": "ANN-1", "kind": "clear", "at": "2026-11-24T10:06:00", "round": 1, "names": ["W1", "V1"], "reason": "十点警报后首轮集合点名单显示两人均在场外"}
+  ],
+  "branches": {
+    "w1_loan": {
+      "desc": "两名见证人证明 W1 自 10:06 借用 V1 工牌，10:07 再入为 W1；W1 10:09 出仓、10:10 重新集合核验；V1 自 10:05 一直在外。",
+      "custody": [
+        {"id": "C-1", "badge_id": "V1", "person_id": "p-w1", "kind": "loan", "from": "2026-11-24T10:06:00", "until": "2026-11-24T10:10:00", "witnesses": ["safety-a", "safety-b"], "verified": true, "note": "双人见证的借牌记录"}
+      ],
+      "gates_add": [
+        {"id": "G-V1-OUT2", "badge_id": "V1", "kind": "exit", "at": "2026-11-24T10:09:00", "device": "north-out", "received_at": "2026-11-24T10:09:20"}
+      ],
+      "muster_add": [
+        {"id": "M-W1-1010", "person_id": "p-w1", "badge_id": "V1", "at": "2026-11-24T10:10:00", "witness": "safety-c", "round": 1}
+      ]
+    },
+    "v1_reentry": {
+      "desc": "内仓影像与访客本人确认 10:07 是 V1 再入，且尚无其出场记录。",
+      "identity_evidence": [
+        {"id": "E-VIDEO", "badge_id": "V1", "person_id": "p-v1", "at": "2026-11-24T10:07:00", "kind": "video", "source": "内仓 dock-cam"},
+        {"id": "E-SELF", "badge_id": "V1", "person_id": "p-v1", "at": "2026-11-24T10:08:00", "kind": "self-confirmation", "confirmed_by": "p-v1", "source": "访客本人确认"}
+      ]
+    }
+  }
+}
