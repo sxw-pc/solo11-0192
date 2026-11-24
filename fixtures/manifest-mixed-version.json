@@ -1,0 +1,356 @@
+{
+  "scenario": "M1 离线多页采录、断网重试与混版回执归并",
+  "hard_constraints": [
+    "三页同版同内容根才受理",
+    "网关包头确认不等于监管受理",
+    "重试轮次不混版"
+  ],
+  "tokens": {
+    "v1": "TOK-M1-V1-0001",
+    "v2": "TOK-M1-V2-0002",
+    "v2_retry": "TOK-M1-V2-RETRY-0003"
+  },
+  "documents": {
+    "v1": {
+      "manifest_id": "M1",
+      "pages": [
+        {
+          "number": 1,
+          "kind": "header",
+          "version": 1,
+          "payload": {
+            "manifest_id": "M1",
+            "truck_plate": "辽A·G1024",
+            "carrier": "第一车队",
+            "destination": "大连港"
+          },
+          "content_root": "72be3dea68f2f1cb90301182bbc47b165392c9953be85a55e6db8224a1ef4077",
+          "signature": "eeea425b37158722f797a0c5ce5ce1bb0ebdb161c2c2b218320b211086176d9f"
+        },
+        {
+          "number": 2,
+          "kind": "load",
+          "version": 1,
+          "payload": {
+            "crop": "maize",
+            "load_kg": 40000,
+            "loaded_at": "2026-11-20T08:30:00+08:00"
+          },
+          "content_root": "72be3dea68f2f1cb90301182bbc47b165392c9953be85a55e6db8224a1ef4077",
+          "signature": "c80be7b5f8481f77c166d7ea0583e2e6d2a2021964690bca614855f0c8de8933"
+        },
+        {
+          "number": 3,
+          "kind": "seal",
+          "version": 1,
+          "payload": {
+            "seal_no": "S-001",
+            "sealed_at": "2026-11-20T09:00:00+08:00"
+          },
+          "content_root": "72be3dea68f2f1cb90301182bbc47b165392c9953be85a55e6db8224a1ef4077",
+          "signature": "1f1b9401283704c7c9af99cc80d4a79b99dd81365122fc264a94f6f20b59102e"
+        }
+      ],
+      "content_root": "72be3dea68f2f1cb90301182bbc47b165392c9953be85a55e6db8224a1ef4077"
+    },
+    "v2": {
+      "manifest_id": "M1",
+      "pages": [
+        {
+          "number": 1,
+          "kind": "header",
+          "version": 1,
+          "payload": {
+            "manifest_id": "M1",
+            "truck_plate": "辽A·G1024",
+            "carrier": "第一车队",
+            "destination": "大连港"
+          },
+          "content_root": "26fe6b49526b13b0d039bc3cc08c858976cbf753a1045f2369df034fe7831513",
+          "signature": "8e9f9661f7777488b68d753dcdb7f5e88d7753efdcfb7dbb609d84a6da9d2a17"
+        },
+        {
+          "number": 2,
+          "kind": "load",
+          "version": 2,
+          "payload": {
+            "crop": "maize",
+            "load_kg": 41200,
+            "loaded_at": "2026-11-20T10:15:00+08:00",
+            "change_reason": "复磅后装载量修正"
+          },
+          "content_root": "26fe6b49526b13b0d039bc3cc08c858976cbf753a1045f2369df034fe7831513",
+          "signature": "f6bc31472ade0feb2cf8daac9c399b0db12e0a8170df296e87736ae901237fd5"
+        },
+        {
+          "number": 3,
+          "kind": "seal",
+          "version": 1,
+          "payload": {
+            "seal_no": "S-001",
+            "sealed_at": "2026-11-20T09:00:00+08:00"
+          },
+          "content_root": "26fe6b49526b13b0d039bc3cc08c858976cbf753a1045f2369df034fe7831513",
+          "signature": "4d8acf2c01379d745abe45b0123e4b181fdade9d0786200a64fc61ef0d434de1"
+        }
+      ],
+      "content_root": "26fe6b49526b13b0d039bc3cc08c858976cbf753a1045f2369df034fe7831513"
+    }
+  },
+  "content_roots": {
+    "v1": "72be3dea68f2f1cb90301182bbc47b165392c9953be85a55e6db8224a1ef4077",
+    "v2": "26fe6b49526b13b0d039bc3cc08c858976cbf753a1045f2369df034fe7831513"
+  },
+  "steps": [
+    {
+      "step": 1,
+      "name": "v1 三页送出并获全部回执",
+      "round": {
+        "round_id": "RND-V1",
+        "token": "TOK-M1-V1-0001",
+        "content_root": "72be3dea68f2f1cb90301182bbc47b165392c9953be85a55e6db8224a1ef4077",
+        "page_numbers": [
+          1,
+          2,
+          3
+        ]
+      },
+      "gateway_acks": [
+        {
+          "packet_id": "PK-V1-1",
+          "manifest_id": "M1",
+          "content_root": "72be3dea68f2f1cb90301182bbc47b165392c9953be85a55e6db8224a1ef4077",
+          "token": "TOK-M1-V1-0001",
+          "number": 1
+        },
+        {
+          "packet_id": "PK-V1-2",
+          "manifest_id": "M1",
+          "content_root": "72be3dea68f2f1cb90301182bbc47b165392c9953be85a55e6db8224a1ef4077",
+          "token": "TOK-M1-V1-0001",
+          "number": 2
+        },
+        {
+          "packet_id": "PK-V1-3",
+          "manifest_id": "M1",
+          "content_root": "72be3dea68f2f1cb90301182bbc47b165392c9953be85a55e6db8224a1ef4077",
+          "token": "TOK-M1-V1-0001",
+          "number": 3
+        }
+      ],
+      "receipts": [
+        {
+          "receipt_id": "R-V1-P1",
+          "manifest_id": "M1",
+          "content_root": "72be3dea68f2f1cb90301182bbc47b165392c9953be85a55e6db8224a1ef4077",
+          "token": "TOK-M1-V1-0001",
+          "number": 1,
+          "page_version": 1,
+          "digest": "5348a4c65af24436c083345c8648f817f596e67a4a66ee0c078237ace76b8a0a",
+          "regulator_signature": "96dc2de83d0fdd7b2b04376b9fc478ae9889d272f5e2fc6e753a87b48c59da2e"
+        },
+        {
+          "receipt_id": "R-V1-P2",
+          "manifest_id": "M1",
+          "content_root": "72be3dea68f2f1cb90301182bbc47b165392c9953be85a55e6db8224a1ef4077",
+          "token": "TOK-M1-V1-0001",
+          "number": 2,
+          "page_version": 1,
+          "digest": "3ce6309b9a045a82f16823a4317d49573ccc343d1fc6baf4367584b8edbee0cc",
+          "regulator_signature": "9b9459faa94b9642674878c97134d68e77eae5a97f494ab559373e13c1dab681"
+        },
+        {
+          "receipt_id": "R-V1-P3",
+          "manifest_id": "M1",
+          "content_root": "72be3dea68f2f1cb90301182bbc47b165392c9953be85a55e6db8224a1ef4077",
+          "token": "TOK-M1-V1-0001",
+          "number": 3,
+          "page_version": 1,
+          "digest": "2bf7358da06995ad3d5705c6c5ef32ce77de2c1ec03d85c0690a058fa8476e0c",
+          "regulator_signature": "76f750b47e757d103a19b5fd4edc2b70f601c060eaddc59deaa93d18876b3b6e"
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "name": "装载量修正形成 v2，新开轮次发送，断网仅页1上传成功",
+      "round": {
+        "round_id": "RND-V2",
+        "token": "TOK-M1-V2-0002",
+        "content_root": "26fe6b49526b13b0d039bc3cc08c858976cbf753a1045f2369df034fe7831513",
+        "page_numbers": [
+          1,
+          2,
+          3
+        ]
+      },
+      "sent": [
+        {
+          "number": 1,
+          "error": null
+        },
+        {
+          "number": 2,
+          "error": "network-unreachable"
+        },
+        {
+          "number": 3,
+          "error": "network-unreachable"
+        }
+      ],
+      "gateway_acks": [
+        {
+          "packet_id": "PK-V2-1",
+          "manifest_id": "M1",
+          "content_root": "26fe6b49526b13b0d039bc3cc08c858976cbf753a1045f2369df034fe7831513",
+          "token": "TOK-M1-V2-0002",
+          "number": 1
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "name": "网络恢复：监管端补回 v2 页1回执（含一次重复投递）",
+      "receipts": [
+        {
+          "receipt_id": "R-V2-P1",
+          "manifest_id": "M1",
+          "content_root": "26fe6b49526b13b0d039bc3cc08c858976cbf753a1045f2369df034fe7831513",
+          "token": "TOK-M1-V2-0002",
+          "number": 1,
+          "page_version": 1,
+          "digest": "5348a4c65af24436c083345c8648f817f596e67a4a66ee0c078237ace76b8a0a",
+          "regulator_signature": "fc2a71f7adc9661b98722296ff5036ee5b7c1e40d02e9295af84acd59c27ad3e"
+        },
+        {
+          "receipt_id": "R-V2-P1",
+          "manifest_id": "M1",
+          "content_root": "26fe6b49526b13b0d039bc3cc08c858976cbf753a1045f2369df034fe7831513",
+          "token": "TOK-M1-V2-0002",
+          "number": 1,
+          "page_version": 1,
+          "digest": "5348a4c65af24436c083345c8648f817f596e67a4a66ee0c078237ace76b8a0a",
+          "regulator_signature": "fc2a71f7adc9661b98722296ff5036ee5b7c1e40d02e9295af84acd59c27ad3e"
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "name": "网关随后补回迟到的 v1 页2/3回执（新回执编号、旧内容根）",
+      "receipts": [
+        {
+          "receipt_id": "R-V1-P2-LATE",
+          "manifest_id": "M1",
+          "content_root": "72be3dea68f2f1cb90301182bbc47b165392c9953be85a55e6db8224a1ef4077",
+          "token": "TOK-M1-V1-0001",
+          "number": 2,
+          "page_version": 1,
+          "digest": "3ce6309b9a045a82f16823a4317d49573ccc343d1fc6baf4367584b8edbee0cc",
+          "regulator_signature": "9b9459faa94b9642674878c97134d68e77eae5a97f494ab559373e13c1dab681"
+        },
+        {
+          "receipt_id": "R-V1-P3-LATE",
+          "manifest_id": "M1",
+          "content_root": "72be3dea68f2f1cb90301182bbc47b165392c9953be85a55e6db8224a1ef4077",
+          "token": "TOK-M1-V1-0001",
+          "number": 3,
+          "page_version": 1,
+          "digest": "2bf7358da06995ad3d5705c6c5ef32ce77de2c1ec03d85c0690a058fa8476e0c",
+          "regulator_signature": "76f750b47e757d103a19b5fd4edc2b70f601c060eaddc59deaa93d18876b3b6e"
+        }
+      ]
+    }
+  ],
+  "mixed_acknowledgements": [
+    {
+      "receipt_id": "R-V2-P1",
+      "manifest_id": "M1",
+      "content_root": "26fe6b49526b13b0d039bc3cc08c858976cbf753a1045f2369df034fe7831513",
+      "token": "TOK-M1-V2-0002",
+      "number": 1,
+      "page_version": 1,
+      "digest": "5348a4c65af24436c083345c8648f817f596e67a4a66ee0c078237ace76b8a0a",
+      "regulator_signature": "fc2a71f7adc9661b98722296ff5036ee5b7c1e40d02e9295af84acd59c27ad3e"
+    },
+    {
+      "receipt_id": "R-V1-P2-LATE",
+      "manifest_id": "M1",
+      "content_root": "72be3dea68f2f1cb90301182bbc47b165392c9953be85a55e6db8224a1ef4077",
+      "token": "TOK-M1-V1-0001",
+      "number": 2,
+      "page_version": 1,
+      "digest": "3ce6309b9a045a82f16823a4317d49573ccc343d1fc6baf4367584b8edbee0cc",
+      "regulator_signature": "9b9459faa94b9642674878c97134d68e77eae5a97f494ab559373e13c1dab681"
+    },
+    {
+      "receipt_id": "R-V1-P3-LATE",
+      "manifest_id": "M1",
+      "content_root": "72be3dea68f2f1cb90301182bbc47b165392c9953be85a55e6db8224a1ef4077",
+      "token": "TOK-M1-V1-0001",
+      "number": 3,
+      "page_version": 1,
+      "digest": "2bf7358da06995ad3d5705c6c5ef32ce77de2c1ec03d85c0690a058fa8476e0c",
+      "regulator_signature": "76f750b47e757d103a19b5fd4edc2b70f601c060eaddc59deaa93d18876b3b6e"
+    }
+  ],
+  "naive_id_only_verdict": "accepted",
+  "expected_verdict": "pending",
+  "expected_missing_v2_pages": [
+    2,
+    3
+  ],
+  "recovery_a": {
+    "name": "监管端出具 v2 全页同根汇总回执，补录后保持 v2 受理",
+    "summary_receipt": {
+      "receipt_id": "R-SUM-V2",
+      "manifest_id": "M1",
+      "content_root": "26fe6b49526b13b0d039bc3cc08c858976cbf753a1045f2369df034fe7831513",
+      "token": "TOK-M1-V2-0002",
+      "kind": "summary",
+      "pages": [
+        {
+          "number": 1,
+          "page_version": 1,
+          "digest": "5348a4c65af24436c083345c8648f817f596e67a4a66ee0c078237ace76b8a0a"
+        },
+        {
+          "number": 2,
+          "page_version": 2,
+          "digest": "d5e564b88f84be4342742774568de38e857f76d4f054f8a445250c7735c5db24"
+        },
+        {
+          "number": 3,
+          "page_version": 1,
+          "digest": "2bf7358da06995ad3d5705c6c5ef32ce77de2c1ec03d85c0690a058fa8476e0c"
+        }
+      ],
+      "regulator_signature": "ff4b08d88da24a4c4237dc5318feca98db29b7db42e1a0a5223c77906def3e03"
+    },
+    "expected_status": "accepted"
+  },
+  "recovery_b": {
+    "name": "监管端证明仅 v2 页1到达，撤销旧受理公告，新轮次补齐页2/3",
+    "partial_proof": {
+      "receipt_id": "R-PART-V2",
+      "manifest_id": "M1",
+      "content_root": "26fe6b49526b13b0d039bc3cc08c858976cbf753a1045f2369df034fe7831513",
+      "token": "TOK-M1-V2-0002",
+      "kind": "partial",
+      "pages": [
+        {
+          "number": 1,
+          "page_version": 1,
+          "digest": "5348a4c65af24436c083345c8648f817f596e67a4a66ee0c078237ace76b8a0a"
+        }
+      ],
+      "regulator_signature": "5e598485078917f1850fee45142bbf6fef5e02aef0ddd4ca34c0c080c62fe8ff"
+    },
+    "retry_token": "TOK-M1-V2-RETRY-0003",
+    "retry_round_id": "RND-V2-RETRY",
+    "expected_status": "pending",
+    "expected_retry_pages": [
+      2,
+      3
+    ]
+  }
+}

@@ -1,1 +1,65 @@
-{"document":{"manifest_id":"M1","pages":[{"number":1,"kind":"header"},{"number":2,"kind":"load"},{"number":3,"kind":"seal"}]},"acknowledgements":[{"manifest_id":"M1","page":1,"receipt_id":"R1"}]}
+{
+  "document": {
+    "manifest_id": "M1",
+    "pages": [
+      {
+        "number": 1,
+        "kind": "header",
+        "version": 1,
+        "payload": {
+          "manifest_id": "M1",
+          "truck_plate": "辽A·G1024",
+          "carrier": "第一车队",
+          "destination": "大连港"
+        },
+        "content_root": "72be3dea68f2f1cb90301182bbc47b165392c9953be85a55e6db8224a1ef4077",
+        "signature": "eeea425b37158722f797a0c5ce5ce1bb0ebdb161c2c2b218320b211086176d9f"
+      },
+      {
+        "number": 2,
+        "kind": "load",
+        "version": 1,
+        "payload": {
+          "crop": "maize",
+          "load_kg": 40000,
+          "loaded_at": "2026-11-20T08:30:00+08:00"
+        },
+        "content_root": "72be3dea68f2f1cb90301182bbc47b165392c9953be85a55e6db8224a1ef4077",
+        "signature": "c80be7b5f8481f77c166d7ea0583e2e6d2a2021964690bca614855f0c8de8933"
+      },
+      {
+        "number": 3,
+        "kind": "seal",
+        "version": 1,
+        "payload": {
+          "seal_no": "S-001",
+          "sealed_at": "2026-11-20T09:00:00+08:00"
+        },
+        "content_root": "72be3dea68f2f1cb90301182bbc47b165392c9953be85a55e6db8224a1ef4077",
+        "signature": "1f1b9401283704c7c9af99cc80d4a79b99dd81365122fc264a94f6f20b59102e"
+      }
+    ],
+    "content_root": "72be3dea68f2f1cb90301182bbc47b165392c9953be85a55e6db8224a1ef4077"
+  },
+  "acknowledgements": [
+    {
+      "receipt_id": "R1",
+      "manifest_id": "M1",
+      "content_root": "72be3dea68f2f1cb90301182bbc47b165392c9953be85a55e6db8224a1ef4077",
+      "token": "TOK-M1-V1-0001",
+      "number": 1,
+      "page_version": 1,
+      "digest": "5348a4c65af24436c083345c8648f817f596e67a4a66ee0c078237ace76b8a0a",
+      "regulator_signature": "96dc2de83d0fdd7b2b04376b9fc478ae9889d272f5e2fc6e753a87b48c59da2e"
+    }
+  ],
+  "gateway_acks": [
+    {
+      "packet_id": "PK-V1-1",
+      "manifest_id": "M1",
+      "content_root": "72be3dea68f2f1cb90301182bbc47b165392c9953be85a55e6db8224a1ef4077",
+      "token": "TOK-M1-V1-0001",
+      "number": 1
+    }
+  ]
+}
